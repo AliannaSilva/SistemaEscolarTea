@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login - Sistema Escolar</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body class="bg-light">
+  <main class="centered-container" role="main">
+    <div class="card login-card" aria-labelledby="loginTitle">
+      <h1 id="loginTitle" class="title">Sistema Escolar</h1>
+      <p class="subtitle">Acesso: Professores e Coordenador Pedagógico</p>
+
+      <form id="loginForm" class="form">
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="username" required />
+
+        <label for="senha">Senha</label>
+        <input id="senha" name="senha" type="password" autocomplete="current-password" required />
+
+        <!-- ✔️ ID adicionado -->
+        <button id="loginBtn" type="submit" class="btn primary">Entrar</button>
+      </form>
+
+      <div id="msg" class="msg" role="status" aria-live="polite"></div>
+    </div>
+
+    <footer class="footer">Se for a primeira vez, crie um usuário via Postman em /api/auth/register</footer>
+  </main>
+
+  <script src="/js/login.js"></script>
+</body>
+</html>

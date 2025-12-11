@@ -1,0 +1,197 @@
+:root{
+  --blue: #1f6feb;
+  --dark-blue: #134b86;
+  --light: #f6f8fb;
+  --muted: #6b7280;
+  --card-bg: #ffffff;
+  --shadow: 0 6px 18px rgba(19, 40, 72, .08);
+  --radius: 8px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Reset simples */
+* { box-sizing: border-box }
+html, body { height: 100%; margin: 0; background: var(--light); color:#111 }
+a { color: var(--blue) }
+
+/* Centered login */
+.centered-container{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;padding:24px
+}
+.card{
+  background:var(--card-bg);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:28px;max-width:420px;width:100%
+}
+.login-card{text-align:center}
+.title{margin:0;color:var(--dark-blue);font-size:24px}
+.subtitle{margin-top:8px;margin-bottom:18px;color:var(--muted)}
+.form{display:flex;flex-direction:column;gap:10px;text-align:left}
+.form label{font-size:13px;color:var(--muted)}
+.form input, .form select{
+  padding:10px;border-radius:6px;border:1px solid #e6e9ef;background:#fff
+}
+.btn{
+  padding:10px 14px;border-radius:8px;border:0;
+  cursor:pointer;background:#e6e9ef
+}
+.btn.primary{background:var(--blue);color:#fff}
+.btn.small{padding:6px 10px;font-size:14px}
+
+/* Layout dashboard */
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sidebar{
+  background:var(--dark-blue);color:#fff;padding:20px;
+  display:flex;flex-direction:column
+}
+.brand{font-weight:700;margin-bottom:18px}
+.menu{
+  list-style:none;padding:0;margin:0;
+  display:flex;flex-direction:column;gap:6px
+}
+.menu-item{
+  padding:10px;border-radius:6px;cursor:pointer;color:#e6f0ff
+}
+.menu-item.active{background:rgba(255,255,255,0.06)}
+.topbar{
+  background:#fff;padding:14px 20px;border-bottom:1px solid #e9eef6
+}
+.content{padding:20px;background:var(--light)}
+.toolbar{display:flex;justify-content:flex-end;margin-bottom:10px}
+
+.table{
+  width:100%;border-collapse:collapse;background:#fff;
+  border-radius:8px;overflow:hidden;box-shadow:var(--shadow)
+}
+.table th, .table td{
+  padding:12px;text-align:left;border-bottom:1px solid #f1f5f9
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16,24,40,0.4);
+  z-index: 999;
+}
+
+.modal-content {
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  min-width:320px;
+  max-width:560px;
+  box-shadow:var(--shadow);
+}
+
+.modal-actions{
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  margin-top:12px;
+}
+
+/* Classe utilitária para esconder */
+.modal.hidden {
+  display: none !important;
+}
+
+/* Responsivo */
+@media (max-width:800px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{flex-direction:row;gap:8px;overflow:auto}
+  .brand{display:none}
+  .topbar{position:sticky;top:0;z-index:10}
+}
+
+
+
+/* Modal atividade extra */
+.modal-atividade {
+  max-width: 720px;
+  width: 100%;
+}
+
+.label {
+  font-weight: 600;
+  margin-top: 12px;
+  display: block;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  margin-top: 4px;
+}
+
+.textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.col {
+  flex: 1;
+}
+
+/* TOGGLE (Switch estilo iOS) */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+  margin-top: 8px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #ccc;
+  transition: .3s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #1f6feb;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* Fade bonito para aparecer select TEA */
+.fade {
+  animation: fadeIn .3s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(-4px);}
+  to {opacity: 1; transform: translateY(0);}
+}

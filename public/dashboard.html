@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard - Sistema Escolar</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    /* (seu CSS — mantive o mesmo do original) */
+    :root{--blue:#1f6feb;--dark-blue:#134b86;--light:#f6f8fb;--muted:#6b7280;}
+    .layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+    .sidebar{background:var(--dark-blue);color:#fff;padding:28px;display:flex;flex-direction:column;gap:16px}
+    .brand{font-size:22px;font-weight:700;margin-bottom:6px}
+    .menu{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
+    .menu-item{padding:12px;border-radius:8px;cursor:pointer;color:#e8f4ff}
+    .menu-item.active{background:rgba(255,255,255,0.06)}
+    .content{padding:34px;background:#fff}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    .btn{padding:10px 16px;border-radius:10px;border:0;cursor:pointer}
+    .btn.primary{background:var(--blue);color:#fff}
+    .table{width:100%;border-collapse:collapse;background:var(--light);border-radius:10px;overflow:hidden}
+    .table th, .table td{padding:12px;text-align:left;border-bottom:1px solid #e9eef6}
+    .card{background:#fff;padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(19,40,72,.06)}
+    .hidden{display:none}
+    .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);z-index:50}
+    .modal-content{background:#fff;padding:20px;border-radius:8px;min-width:320px;max-width:760px;position:relative}
+    .form-row{display:flex;gap:12px;margin-top:8px}
+    .form-row > *{flex:1}
+    .close{position:absolute;top:10px;right:12px;cursor:pointer;font-size:20px}
+    .close-x{position:absolute;top:10px;right:12px;cursor:pointer;font-size:20px;background:none;border:0}
+    .modal-atividade .row{display:flex;gap:12px;margin-top:8px}
+    .modal-atividade .col{flex:1}
+    .label{display:block;margin-bottom:6px;font-weight:600}
+    .input{width:100%;padding:8px;border-radius:6px;border:1px solid #ddd}
+    .textarea{height:120px}
+    .switch{display:inline-block;vertical-align:middle}
+    .switch input{margin-right:8px;transform: scale(1.15)}
+    .modal-actions{margin-top:12px;text-align:right;display:flex;gap:8px;justify-content:flex-end}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">Sistema Escolar</div>
+      <ul class="menu" id="menu">
+        <li class="menu-item active" data-screen="alunos">Alunos</li>
+        <li class="menu-item" data-screen="atividades">Atividades</li>
+        <li class="menu-item" data-screen="notas">Notas</li>
+        <li class="menu-item" data-screen="observacoes">Observações Comportamentais</li>
+        <li class="menu-item" id="logout">Sair</li>
+      </ul>
+    </aside>
+
+    <main class="content">
+      <!-- ALUNOS -->
+      <section id="screen-alunos" class="screen">
+        <div class="toolbar">
+          <h1>Alunos</h1>
+          <button id="novoAlunoBtn" class="btn primary">+ Novo Aluno</button>
+        </div>
+        <div class="card">
+          <table class="table" id="alunosTable">
+            <thead>
+              <tr>
+                <th>ID</th><th>Nome</th><th>Turma</th><th>Nascimento</th>
+                <th>Laudo</th><th>TEA</th><th>Suporte</th><th>Status</th><th>Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ATIVIDADES -->
+      <section id="screen-atividades" class="screen hidden">
+        <div class="toolbar">
+          <h1>Atividades</h1>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <select id="filtroTurmaAtv" class="input" aria-label="Filtrar por turma - Atividades">
+              <option value="">Todas as turmas</option>
+            </select>
+            <button id="novaAtividadeBtn" class="btn primary">+ Nova Atividade</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <table class="table" id="atividadesTable">
+            <thead>
+              <tr>
+                <th>ID</th><th>Título</th><th>Descrição</th><th>Entrega</th><th>Tipo</th><th>Turma</th>
+                <th>Aluno (TEA)</th><th>Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- NOTAS -->
+      <section id="screen-notas" class="screen hidden">
+        <div class="toolbar">
+          <h1>Notas</h1>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <select id="filtroTurmaNotas" class="input" aria-label="Filtrar por turma - Notas">
+              <option value="">Todas as turmas</option>
+            </select>
+            <button id="novaNotaBtn" class="btn primary">+ Nova Nota</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <table class="table" id="notasTable">
+            <thead>
+              <tr>
+                <th>ID</th><th>Aluno</th><th>Atividade</th><th>Nota</th><th>Observação</th><th>Data</th><th>Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- OBSERVAÇÕES -->
+      <section id="screen-observacoes" class="screen hidden">
+        <div class="toolbar">
+          <h1>Observações Comportamentais</h1>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <select id="filtroTurmaObs" class="input" aria-label="Filtrar por turma - Observações">
+              <option value="">Todas as turmas</option>
+            </select>
+            <button id="exportSistemaPDF" class="btn">Exportar Relatório Geral (PDF)</button>
+            <button id="novaObsBtn" class="btn primary">+ Nova Observação</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <table class="table" id="obsTable">
+            <thead>
+              <tr><th>ID</th><th>Aluno</th><th>Observação</th><th>Data</th><th>Ações</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL ALUNO -->
+  <div id="alunoModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <span class="close" id="closeAlunoX">&times;</span>
+      <h2 id="modalTitle">Novo Aluno</h2>
+      <form id="alunoForm">
+        <label>Nome</label>
+        <input type="text" id="alunoNome" class="input" required>
+
+        <label>Turma</label>
+        <input type="text" id="alunoTurma" class="input" required>
+
+        <label>Data de Nascimento</label>
+        <input type="date" id="alunoNascimento" class="input" required>
+
+        <label>Possui TEA?</label>
+        <select id="alunoTea" class="input">
+          <option value="0">Não</option>
+          <option value="1">Sim</option>
+        </select>
+
+        <div id="rowLaudo" style="display:none;">
+          <label>Laudo Entregue</label>
+          <select id="alunoLaudo" class="input">
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
+        </div>
+
+        <div id="rowNivelTEA" style="display:none;">
+          <label>Nível de Suporte</label>
+          <select id="alunoNivelTea" class="input">
+            <option value="">Selecione</option>
+            <option value="Nível 1">Nível 1</option>
+            <option value="Nível 2">Nível 2</option>
+            <option value="Nível 3">Nível 3</option>
+          </select>
+        </div>
+
+        <label>Status</label>
+        <select id="alunoStatus" class="input">
+          <option value="Ativo">Ativo</option>
+          <option value="Inativo">Inativo</option>
+        </select>
+
+        <div style="margin-top:15px;text-align:right;">
+          <button type="button" class="cancel btn" id="cancelAluno">Cancelar</button>
+          <button type="submit" id="saveAluno" class="btn primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL ATIVIDADE -->
+  <div id="modalAtividade" class="modal hidden" aria-hidden="true">
+    <div class="modal-content modal-atividade">
+      <button id="closeAtvX" class="close-x">×</button>
+
+      <h2 id="modalAtividadeTitle">Nova Atividade</h2>
+
+      <label class="label">Título</label>
+      <input id="atvTitulo" type="text" class="input" placeholder="Título da atividade">
+
+      <div class="row">
+        <div class="col">
+          <label class="label">Data de entrega</label>
+          <input id="atvDataEntrega" type="date" class="input">
+        </div>
+
+        <div class="col">
+          <label class="label" style="display:block;margin-bottom:6px;">Atividade adaptada (TEA)</label>
+          <label class="switch">
+            <input type="checkbox" id="atvAdaptada">
+            <span class="slider round"></span>
+          </label>
+          <span id="textoAdaptada" style="margin-left:10px; font-weight:600; color:#333;">Não</span>
+        </div>
+      </div>
+
+      <label class="label">Descrição</label>
+      <textarea id="atvDescricao" class="input textarea" placeholder="Detalhes da atividade"></textarea>
+
+      <label class="label">Turma</label>
+      <select id="atvTurma" class="input">
+        <option value="">Selecione a turma</option>
+      </select>
+
+      <div id="selectAlunoTea_modal" class="hidden" style="margin-top:10px;">
+        <label class="label">Aluno TEA responsável pela adaptação</label>
+        <select id="atvAlunoTea" class="input">
+          <option value="">Selecione o aluno</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button id="cancelAtividade" class="btn">Cancelar</button>
+        <button id="saveAtividade" class="btn primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL NOTA -->
+  <div id="modalNota" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <button id="closeNotaX" class="close-x">×</button>
+      <h3>Cadastrar Nota</h3>
+      <div class="form-row">
+        <select id="notaAlunoSelect" class="input"><option value="">Selecione o aluno</option></select>
+        <select id="notaAtividadeSelect" class="input"><option value="">Selecione a atividade</option></select>
+      </div>
+      <div class="form-row">
+        <input id="notaValor" type="number" class="input" placeholder="Nota" min="0" max="10">
+      </div>
+      <div class="form-row">
+        <textarea id="notaObservacao" class="input" placeholder="Observações"></textarea>
+      </div>
+      <div style="margin-top:12px;text-align:right;">
+        <button id="cancelNota" class="btn">Cancelar</button>
+        <button id="saveNota" class="btn primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL OBS -->
+  <div id="modalObs" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <button id="closeObsX" class="close-x">×</button>
+      <h2>Nova Observação</h2>
+      <label>Aluno:</label>
+      <select id="obsAlunoSelect" class="input"></select>
+      <label>Observação:</label>
+      <textarea id="obsTexto" class="input"></textarea>
+      <div style="margin-top:15px;text-align:right;">
+        <button id="cancelObs" class="btn">Cancelar</button>
+        <button id="saveObs" class="btn primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/dashboard.js?v=9999"></script>
+</body>
+</html>

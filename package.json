@@ -1,0 +1,31 @@
+{
+  "name": "sistema-escolar-tcc",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch",
+    "test:api": "jest --runInBand tests/api/*.test.js",
+    "test:resetdb": "node src/database/setup.js",
+    "cypress": "cypress open",
+    "cypress:run": "cypress run"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "pdfkit": "^0.17.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "cross-env": "^10.1.0",
+    "cypress": "^12.12.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.1",
+    "supertest": "^7.1.4"
+  }
+}
